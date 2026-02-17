@@ -3,9 +3,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { z } = require("zod");
 
-const User = require("../models/User");
+const User = require("../models/user");
 const Goal = require("../models/goal");
-const { Pillars } = require("../models/User");
+const { Pillars } = require("../models/user");
 
 const router = express.Router();
 
