@@ -72,7 +72,7 @@ module.exports = {
     },
     updateUser: async (req, res) => {
         try {
-            console.log(req.body)
+            console.log(req.body);
             const userId = req.user.sub;
 
             // 1️⃣ Prepare user updates
@@ -105,7 +105,7 @@ module.exports = {
                 }
             }
 
-            // 4️⃣ Return user + goal
+            // 4️⃣ Return user + goal (updated to match Flutter model)
             res.json({
                 user: {
                     id: user._id,
@@ -120,11 +120,13 @@ module.exports = {
                         id: goal._id,
                         title: goal.title,
                         pillar: goal.pillar,
-                        reminderTime: goal.reminderTime,
-                        frequency: goal.frequency,
-                        customDays: goal.customDays,
-                        startDate: goal.startDate,
-                        endDate: goal.endDate,
+                        alarmId: goal.alarmId,
+                        repeatType: goal.repeatType,
+                        hour: goal.hour,
+                        minute: goal.minute,
+                        scheduledAt: goal.scheduledAt,
+                        weekdays: goal.weekdays,
+                        dayOfMonth: goal.dayOfMonth,
                         motivationStyle: goal.motivationStyle,
                         format: goal.format,
                         faithToggle: goal.faithToggle,
@@ -142,6 +144,7 @@ module.exports = {
             res.status(500).json({ message: "Server error" });
         }
     }
+
 
 
 };
