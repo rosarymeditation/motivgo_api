@@ -79,7 +79,7 @@ module.exports = {
             const userUpdates = {};
             if (req.body.timezone) userUpdates.timezone = req.body.timezone;
             if (req.body.focusPillars) {
-                userUpdates.focusPillars = req.body.focusPillars.slice(0, 2); // enforce free tier limit
+                userUpdates.focusPillars = req.body.focusPillars; // enforce free tier limit
             }
 
             // 2️⃣ Update the user
