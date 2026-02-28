@@ -70,6 +70,49 @@ module.exports = {
             res.status(500).json({ message: "Server error" });
         }
     },
+    login: async (req, res) => {
+        try {
+            // 1️⃣ Validate input
+            const parsed = LoginSchema.safeParse(req.body);
+            if (!parsed.success) {
+                return res.status(400).json({ message: "Invalid email or password format." });
+            }
+
+            const { email, password } = parsed.data;
+
+            // 2️⃣ Find user
+            const user = await User.findOne({ email });
+            if (!user) {
+                return res.status(401).json({ message: "Invalid credentials." });
+            }
+
+            // 3️⃣ Compare password
+            const isMatch = await bcrypt.compare(password, user.passwordHash);
+            if (!isMatch) {
+                return res.status(401).json({ message: "Invalid credentials." });
+            }
+
+            // 4️⃣ Sign JWT
+            const token = signToken(user);
+
+            // 5️⃣ Return response (match register format)
+            res.status(200).json({
+                token,
+                user: {
+                    id: user._id,
+                    firstName: user.firstName,
+                    email: user.email,
+                    tier: user.tier,
+                    timezone: user.timezone,
+                    focusPillars: user.focusPillars,
+                },
+            });
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: "Server error" });
+        }
+    },
     updateUser: async (req, res) => {
         try {
             console.log(req.body);
@@ -113,7 +156,7 @@ module.exports = {
                     email: user.email,
                     tier: user.tier,
                     timezone: user.timezone,
-                    focusPillars: user.focusPillars,
+                    focusPillars: req.body.focusPillars,
                 },
                 goal: goal
                     ? {
